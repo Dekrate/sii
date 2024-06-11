@@ -11,6 +11,5 @@ public interface ProductController {
 	ResponseEntity<?> createProduct(NewProductImplDto productDto);
 	ResponseEntity<?> updateProduct(String name, NewProductImplDto productDto);
 	ResponseEntity<?> getDiscountPriceForProduct(@PathVariable String name, @PathVariable String promoCode);
-	void simulatePurchase(ProductImplDto productDto);
 	ResponseEntity<List<ProductImplDto>> getProducts();
 }

@@ -6,8 +6,7 @@ import pl.diakowski.mikolaj.sii.currency.CurrencyEnum;
 import pl.diakowski.mikolaj.sii.product.dto.NewProductImplDto;
 import pl.diakowski.mikolaj.sii.product.dto.ProductDtoMapper;
 import pl.diakowski.mikolaj.sii.product.dto.ProductImplDto;
-import pl.diakowski.mikolaj.sii.product.exception.CurrenciesNotEqualException;
-import pl.diakowski.mikolaj.sii.product.exception.ProductIsNullException;
+import pl.diakowski.mikolaj.sii.product.exception.*;
 import pl.diakowski.mikolaj.sii.currency.exception.CurrencyDoesNotExistException;
 import pl.diakowski.mikolaj.sii.promocode.PromoCode;
 import pl.diakowski.mikolaj.sii.promocode.PromoCodeRepository;
@@ -30,7 +29,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	@Transactional
-	public void createProduct(NewProductImplDto productDto) throws ProductIsNullException, CurrencyDoesNotExistException {
+	public void createProduct(NewProductImplDto productDto) throws ProductIsNullException, CurrencyDoesNotExistException, ProductExistsException, PriceBelowOrEqualZeroException {
 		if (productDto == null) {
 			throw new ProductIsNullException("OrderDto cannot be null");
 		}
@@ -43,6 +42,12 @@ public class ProductServiceImpl implements ProductService {
 		if (Arrays.stream(CurrencyEnum.values()).noneMatch(currencyEnum ->
 				currencyEnum.name().equals(productDto.currency()))) {
 			throw new CurrencyDoesNotExistException("Currency does not exist");
+		}
+		if (productRepository.findByName(productDto.name()).isPresent()) {
+			throw new ProductExistsException("Product already exists");
+		}
+		if (productDto.price() <= 0) {
+			throw new PriceBelowOrEqualZeroException("Price cannot be negative");
 		}
 		productRepository.save(new ProductImpl(CurrencyEnum.valueOf(productDto.currency()), productDto.name(),
 				productDto.description(), productDto.price()));
@@ -80,7 +85,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public Double getDiscountPriceForProduct(String name, String promoCode) throws ProductIsNullException,
-			PromoCodeNotFoundException, CurrenciesNotEqualException {
+			PromoCodeNotFoundException, CurrenciesNotEqualException, DiscountTooHighException {
 		ProductImpl product = productRepository.findByName(name)
 				.orElseThrow(() -> new ProductIsNullException("Product does not exist"));
 		PromoCode promoCodeObject = promoCodeRepository.findByCode(promoCode)
@@ -89,7 +94,9 @@ public class ProductServiceImpl implements ProductService {
 			throw new CurrenciesNotEqualException(String.format("Promo code does not match product currency. Product's currency: %s, promo code's currency: %s",
 					product.getCurrency(), promoCodeObject.getCurrency()), product.getPrice());
 		}
-		return product.getPrice();
+		if (product.getPrice() - promoCodeObject.getDiscount() <= 0)
+			throw new DiscountTooHighException("Discount is too high");
+		return product.getPrice() - promoCodeObject.getDiscount();
 	}
 
 	@Override

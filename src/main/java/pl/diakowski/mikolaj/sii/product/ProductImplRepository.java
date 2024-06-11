@@ -9,6 +9,4 @@ import java.util.Optional;
 public interface ProductImplRepository extends JpaRepository<ProductImpl, Long> {
 
 	Optional<ProductImpl> findByName(String name);
-
-	void updateByName(String name, ProductImpl productImpl);
 }

@@ -1,5 +1,6 @@
 package pl.diakowski.mikolaj.sii.product;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Range;
@@ -13,6 +14,7 @@ public class ProductImpl extends BaseModel implements Product {
 	@NotNull
 	CurrencyEnum currency;
 	@NotNull
+	@Column(unique = true)
 	private String name;
 	private String description;
 	@NotNull
