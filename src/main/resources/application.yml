@@ -8,7 +8,8 @@ spring:
     h2:
         console:
             enabled: true
+    liquibase:
+        change-log: db/changelog/db.changelog-master.xml
 server:
     http2:
         enabled: true
-

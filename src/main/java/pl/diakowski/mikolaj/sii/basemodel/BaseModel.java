@@ -11,7 +11,7 @@ public abstract class BaseModel {
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private Long id;
 
 	@Column(name = "created_at")
 	@ColumnDefault("CURRENT_TIMESTAMP")
@@ -22,17 +22,20 @@ public abstract class BaseModel {
 	@NotNull
 	private LocalDateTime updatedAt;
 
-	public BaseModel(Integer id, LocalDateTime createdAt, LocalDateTime updatedAt) {
+	public BaseModel(Long id, LocalDateTime createdAt, LocalDateTime updatedAt) {
 		this.id = id;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
 	}
 
-	public Integer getId() {
+	public BaseModel() {
+	}
+
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
