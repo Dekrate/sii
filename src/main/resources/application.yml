@@ -10,6 +10,13 @@ spring:
             enabled: true
     liquibase:
         change-log: db/changelog/db.changelog-master.xml
+        enabled: false
+    datasource:
+        hikari:
+            jdbc-url: jdbc:h2:mem:testdb
+    data:
+        jdbc:
+            dialect: h2
 server:
     http2:
         enabled: true

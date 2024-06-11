@@ -1,17 +1,26 @@
 package pl.diakowski.mikolaj.sii.promocode;
 
-import java.util.Currency;
+
+import pl.diakowski.mikolaj.sii.currency.CurrencyEnum;
 
 public interface PromoCode {
 	String getCode();
 
 	void setCode(String code);
 
-	Currency getCurrency();
+	CurrencyEnum getCurrency();
 
-	void setCurrency(Currency currency);
+	void setCurrency(CurrencyEnum currencyEnum);
 
 	Long getMaxUses();
 
 	void setMaxUses(Long maxUses);
+
+	Double getDiscount();
+
+	void setDiscount(Double discount);
+
+	Long getUses();
+
+	void setUses(Long uses);
 }

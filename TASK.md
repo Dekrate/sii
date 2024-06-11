@@ -9,7 +9,7 @@ Create an application to manage discount codes for sales or promotions (a.k.a pr
 1. A promo code is a text with 3-24 alphanumeric case-sensitive characters which must not contain whitespaces and must be unique.
 2. Each promo code:
    1. should have an expiration date
-   2. should have a discount amount and currency - the application should not be limited to only one currency
+   2. should have a discount amount and currencyEnum - the application should not be limited to only one currencyEnum
    3. should have a maximal number of allowed usages
    4. can be applied to any product
 3. Logic for calculating the discount price:
@@ -31,7 +31,7 @@ Create an application to manage discount codes for sales or promotions (a.k.a pr
       4. what product was purchased (for simplicity we assume that one purchase = one product)
 5. Each product:
    1. should have a required name and optional description
-   2. should have a regular price (amount with currency)
+   2. should have a regular price (amount with currencyEnum)
 
 ## REST API endpoints
 
@@ -43,7 +43,7 @@ Create an application to manage discount codes for sales or promotions (a.k.a pr
 6. Get one promo code's details by providing the promo code. The detail should also contain the number of usages.
 7. Get the discount price by providing a product and a promo code.
 8. Simulate purchase
-9. [Optional] A sales report: number of purchases and total value by currency (see below)
+9. [Optional] A sales report: number of purchases and total value by currencyEnum (see below)
 
 Sales report example:
 | Currency | Total amount | Total discount | No of purchases |

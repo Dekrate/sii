@@ -3,9 +3,12 @@ package pl.diakowski.mikolaj.sii.basemodel;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicInsert;
 
 import java.time.LocalDateTime;
 
+@DynamicInsert
 @MappedSuperclass
 public abstract class BaseModel {
 	@Id
@@ -14,12 +17,10 @@ public abstract class BaseModel {
 	private Long id;
 
 	@Column(name = "created_at")
-	@ColumnDefault("CURRENT_TIMESTAMP")
-	@NotNull
+	@CreationTimestamp
 	private LocalDateTime createdAt;
 
 	@Column(name = "updated_at")
-	@NotNull
 	private LocalDateTime updatedAt;
 
 	public BaseModel(Long id, LocalDateTime createdAt, LocalDateTime updatedAt) {
