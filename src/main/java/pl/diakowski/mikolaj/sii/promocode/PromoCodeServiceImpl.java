@@ -3,6 +3,7 @@ package pl.diakowski.mikolaj.sii.promocode;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import pl.diakowski.mikolaj.sii.currency.CurrencyEnum;
+import pl.diakowski.mikolaj.sii.currency.exception.CurrencyDoesNotExistException;
 import pl.diakowski.mikolaj.sii.promocode.dto.NewPromoCodeDto;
 import pl.diakowski.mikolaj.sii.promocode.dto.PromoCodeDto;
 import pl.diakowski.mikolaj.sii.promocode.dto.PromoCodeDtoMapper;
@@ -10,7 +11,6 @@ import pl.diakowski.mikolaj.sii.promocode.exception.*;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Supplier;
 
 @Service
 public class PromoCodeServiceImpl implements PromoCodeService {
@@ -25,7 +25,22 @@ public class PromoCodeServiceImpl implements PromoCodeService {
 	public void addPromoCode(NewPromoCodeDto promoCode) throws CodeIsNullException, InvalidCodeLengthException,
 			CodeAlreadyExistsException, InvalidMaxUsesException, CurrencyDoesNotExistException, InvalidDiscountException {
 		if (promoCode.code() == null) {
-			throw new CodeIsNullException("Code cannot be blank");
+			throw new CodeIsNullException("Code cannot be null");
+		}
+		if (promoCode.code().isBlank()) {
+			throw new CodeIsNullException("Discount code cannot be blank");
+		}
+		if (promoCode.currency() == null) {
+			throw new CurrencyDoesNotExistException("Currency cannot be null");
+		}
+		if (promoCode.currency().isBlank()) {
+			throw new CurrencyDoesNotExistException("Currency cannot be blank");
+		}
+		if (promoCode.maxUses() == null) {
+			throw new InvalidMaxUsesException("Max uses cannot be null");
+		}
+		if (promoCode.discount() == null) {
+			throw new InvalidDiscountException("Discount cannot be null");
 		}
 		if (promoCode.code().length() > 24 || promoCode.code().length() < 3) {
 			throw new InvalidCodeLengthException("Code must be between 8 and 24 characters");
@@ -39,12 +54,9 @@ public class PromoCodeServiceImpl implements PromoCodeService {
 		if (Arrays.stream(CurrencyEnum.values()).noneMatch(currencyEnum -> currencyEnum.name().equals(promoCode.currency()))) {
 			throw new CurrencyDoesNotExistException("Currency does not exist");
 		}
-		if (promoCode.discount() < 0) {
-			throw new InvalidDiscountException("Discount must be greater than 0");
-		}
 		promoCodeRepository.save(new PromoCodeImpl(promoCode.code(), CurrencyEnum.valueOf(promoCode.currency()),
-			promoCode.discount(), promoCode.maxUses(), 0L));
-		}
+				promoCode.discount() < 0.0 ? 0.0 : promoCode.discount(), promoCode.maxUses(), 0L));
+	}
 
 	@Override
 	public List<PromoCodeDto> getPromoCodes() {

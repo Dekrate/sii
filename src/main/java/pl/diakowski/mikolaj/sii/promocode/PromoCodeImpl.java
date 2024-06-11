@@ -29,7 +29,7 @@ public class PromoCodeImpl extends BaseModel implements PromoCode {
 	@NotNull
 	@Range(min = 1)
 	private Long maxUses;
-	
+
 	private Long uses;
 
 	public PromoCodeImpl() {

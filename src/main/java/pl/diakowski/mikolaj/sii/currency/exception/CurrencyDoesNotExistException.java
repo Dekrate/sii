@@ -1,4 +1,4 @@
-package pl.diakowski.mikolaj.sii.promocode.exception;
+package pl.diakowski.mikolaj.sii.currency.exception;
 
 public class CurrencyDoesNotExistException extends Exception {
 	public CurrencyDoesNotExistException() {
