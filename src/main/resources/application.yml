@@ -1,0 +1,14 @@
+spring:
+    application:
+        name: sii
+    docker:
+        compose:
+            enabled: false
+
+    h2:
+        console:
+            enabled: true
+server:
+    http2:
+        enabled: true
+
