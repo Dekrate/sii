@@ -1,6 +1,9 @@
 package pl.diakowski.mikolaj.sii.product;
 
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.*;
 import pl.diakowski.mikolaj.sii.product.dto.NewProductDto;
 import pl.diakowski.mikolaj.sii.product.dto.ProductDto;
@@ -61,5 +64,14 @@ public class ProductController {
 	public ResponseEntity<List<ProductDto>> getProducts() {
 		return ResponseEntity.ok(productService.getProducts());
 
+	}
+
+	@ExceptionHandler
+	public ResponseEntity<String> handleInvalidInput(Exception ex) {
+		if (ex instanceof HttpMessageNotReadableException exception) {
+			String message = exception.getMessage();
+			return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
 	}
 }

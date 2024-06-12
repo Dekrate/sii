@@ -1,6 +1,8 @@
 package pl.diakowski.mikolaj.sii.promocode;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.*;
 import pl.diakowski.mikolaj.sii.currency.exception.CurrencyDoesNotExistException;
 import pl.diakowski.mikolaj.sii.promocode.dto.NewPromoCodeDto;
@@ -21,8 +23,7 @@ public class PromoCodeController {
 	public ResponseEntity<?> createPromoCode(@RequestBody NewPromoCodeDto promoCode) {
 		try {
 			promoCodeService.addPromoCode(promoCode);
-		} catch (CodeIsNullException | InvalidMaxUsesException | CodeAlreadyExistsException |
-		         InvalidCodeLengthException | CurrencyDoesNotExistException | InvalidDiscountException e) {
+		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 			}
 		return ResponseEntity.ok().build();
@@ -40,5 +41,14 @@ public class PromoCodeController {
 		} catch (PromoCodeNotFoundException e) {
 			return ResponseEntity.notFound().build();
 		}
+	}
+
+	@ExceptionHandler
+	public ResponseEntity<String> handleInvalidInput(Exception ex) {
+		if (ex instanceof HttpMessageNotReadableException exception) {
+			String message = exception.getMessage();
+			return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
 	}
 }

@@ -7,11 +7,14 @@ import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.validator.constraints.Range;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 import pl.diakowski.mikolaj.sii.basemodel.BaseModel;
 import pl.diakowski.mikolaj.sii.currency.CurrencyEnum;
-
-import java.time.LocalDateTime;
+import pl.diakowski.mikolaj.sii.promocode.exception.InvalidDiscountException;
+import pl.diakowski.mikolaj.sii.promocode.exception.InvalidMaxUsesException;
+import pl.diakowski.mikolaj.sii.promocode.exception.PromoCodeExpiredException;
 
 @Entity
 public class PromoCode extends BaseModel {
@@ -30,43 +33,24 @@ public class PromoCode extends BaseModel {
 	@Range(min = 1)
 	private Long maxUses;
 
+	@Range(min = 0)
 	private Long uses;
 
 	public PromoCode() {
 
 	}
 
-	public PromoCode(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, String code, CurrencyEnum currencyEnum, Double discount, Long maxUses, Long uses) {
-		super(id, createdAt, updatedAt);
-		this.code = code;
-		this.currencyEnum = currencyEnum;
-		this.discount = discount;
-		this.maxUses = maxUses;
-		this.uses = uses;
-	}
-
-	public PromoCode(String code, CurrencyEnum currencyEnum, Double discount, Long maxUses, Long uses) {
-		this.code = code;
-		this.currencyEnum = currencyEnum;
-		this.discount = discount;
-		this.maxUses = maxUses;
-		this.uses = uses;
-	}
-
-	public PromoCode(LocalDateTime updatedAt, String code, CurrencyEnum currencyEnum, Double discount, Long maxUses, Long uses) {
-		super(updatedAt);
-		this.code = code;
-		this.currencyEnum = currencyEnum;
-		this.discount = discount;
-		this.maxUses = maxUses;
-		this.uses = uses;
-	}
-
 	public Long getMaxUses() {
 		return maxUses;
 	}
 
-	public void setMaxUses(Long maxUses) {
+	public void setMaxUses(Long maxUses) throws InvalidMaxUsesException {
+		if (maxUses == null) {
+			throw new InvalidMaxUsesException("Max uses cannot be null");
+		}
+		if (maxUses < 1) {
+			throw new InvalidMaxUsesException("Max uses must be greater than 0");
+		}
 		this.maxUses = maxUses;
 	}
 
@@ -76,6 +60,15 @@ public class PromoCode extends BaseModel {
 	}
 
 	public void setCode(String code) {
+		if (code == null) {
+			throw new NullPointerException("Code cannot be null");
+		}
+		if (code.length() < 3 || code.length() > 24) {
+			throw new IllegalArgumentException("Code must be at least 3 characters long and at most 24 characters long");
+		}
+		if (!code.matches("^\\S+$")) {
+			throw new IllegalArgumentException("Code must not contain whitespace characters");
+		}
 		this.code = code;
 	}
 
@@ -84,6 +77,9 @@ public class PromoCode extends BaseModel {
 	}
 
 	public void setCurrency(CurrencyEnum currencyEnum) {
+		if (currencyEnum == null) {
+			throw new NullPointerException("Currency cannot be null");
+		}
 		this.currencyEnum = currencyEnum;
 	}
 
@@ -91,7 +87,13 @@ public class PromoCode extends BaseModel {
 		return discount;
 	}
 
-	public void setDiscount(Double discount) {
+	public void setDiscount(Double discount) throws InvalidDiscountException {
+		if (discount == null) {
+			throw new NullPointerException("Discount cannot be null");
+		}
+		if (discount < 0) {
+			throw new InvalidDiscountException("Discount must be greater than or equal to 0");
+		}
 		this.discount = discount;
 	}
 
@@ -99,7 +101,16 @@ public class PromoCode extends BaseModel {
 		return uses;
 	}
 
-	public void setUses(Long uses) {
+	public void setUses(Long uses) throws InvalidMaxUsesException, PromoCodeExpiredException {
+		if (uses == null) {
+			throw new NullPointerException("Uses cannot be null");
+		}
+		if (uses < 0) {
+			throw new InvalidMaxUsesException("Uses must be greater than or equal to 0");
+		}
+		if (uses > maxUses) {
+			throw new PromoCodeExpiredException("Uses cannot be greater than max uses");
+		}
 		this.uses = uses;
 	}
 }

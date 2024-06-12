@@ -21,40 +21,21 @@ public class PromoCodeService {
 	}
 
 	@Transactional
-	public void addPromoCode(NewPromoCodeDto promoCode) throws CodeIsNullException, InvalidCodeLengthException,
-			CodeAlreadyExistsException, InvalidMaxUsesException, CurrencyDoesNotExistException, InvalidDiscountException {
-		if (promoCode.code() == null) {
-			throw new CodeIsNullException("Code cannot be null");
-		}
-		if (promoCode.code().isBlank()) {
-			throw new CodeIsNullException("Discount code cannot be blank");
-		}
-		if (promoCode.currency() == null) {
-			throw new CurrencyDoesNotExistException("Currency cannot be null");
-		}
-		if (promoCode.currency().isBlank()) {
-			throw new CurrencyDoesNotExistException("Currency cannot be blank");
-		}
-		if (promoCode.maxUses() == null) {
-			throw new InvalidMaxUsesException("Max uses cannot be null");
-		}
-		if (promoCode.discount() == null) {
-			throw new InvalidDiscountException("Discount cannot be null");
-		}
-		if (promoCode.code().length() > 24 || promoCode.code().length() < 3) {
-			throw new InvalidCodeLengthException("Code must be between 8 and 24 characters");
-		}
-		if (promoCodeRepository.findByCode(promoCode.code()).isPresent()) {
+	public void addPromoCode(NewPromoCodeDto promoCodeDto) throws CodeIsNullException, InvalidCodeLengthException,
+			CodeAlreadyExistsException, InvalidMaxUsesException, CurrencyDoesNotExistException, InvalidDiscountException, PromoCodeExpiredException {
+		if (promoCodeRepository.findByCode(promoCodeDto.code()).isPresent()) {
 			throw new CodeAlreadyExistsException("Code already exists");
 		}
-		if (promoCode.maxUses() < 1) {
-			throw new InvalidMaxUsesException("Max uses must be greater than 0");
-		}
-		if (Arrays.stream(CurrencyEnum.values()).noneMatch(currencyEnum -> currencyEnum.name().equals(promoCode.currency()))) {
+		if (Arrays.stream(CurrencyEnum.values()).noneMatch(currencyEnum -> currencyEnum.name().equals(promoCodeDto.currency()))) {
 			throw new CurrencyDoesNotExistException("Currency does not exist");
 		}
-		promoCodeRepository.save(new PromoCode(promoCode.code(), CurrencyEnum.valueOf(promoCode.currency()),
-				promoCode.discount() < 0.0 ? 0.0 : promoCode.discount(), promoCode.maxUses(), 0L));
+		PromoCode promoCode = new PromoCode();
+		promoCode.setCode(promoCodeDto.code());
+		promoCode.setDiscount(promoCodeDto.discount());
+		promoCode.setMaxUses(promoCodeDto.maxUses());
+		promoCode.setCurrency(CurrencyEnum.valueOf(promoCodeDto.currency()));
+		promoCode.setUses(0L);
+		promoCodeRepository.save(promoCode);
 	}
 
 	public List<PromoCodeDto> getPromoCodes() {

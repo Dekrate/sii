@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Range;
 import pl.diakowski.mikolaj.sii.basemodel.BaseModel;
 import pl.diakowski.mikolaj.sii.currency.CurrencyEnum;
+import pl.diakowski.mikolaj.sii.product.exception.PriceBelowOrEqualZeroException;
 
 import java.time.LocalDateTime;
 
@@ -24,29 +25,6 @@ public class Product extends BaseModel {
 	@Range(min = 0)
 	private Double price;
 
-	public Product(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, CurrencyEnum currency, String name, String description, Double price) {
-		super(id, createdAt, updatedAt);
-		this.currency = currency;
-		this.name = name;
-		this.description = description;
-		this.price = price;
-	}
-
-	public Product(CurrencyEnum currency, String name, String description, Double price) {
-		this.currency = currency;
-		this.name = name;
-		this.description = description;
-		this.price = price;
-	}
-
-	public Product(LocalDateTime updatedAt, CurrencyEnum currency, String name, String description, Double price) {
-		super(updatedAt);
-		this.currency = currency;
-		this.name = name;
-		this.description = description;
-		this.price = price;
-	}
-
 	public Product() {
 	}
 
@@ -54,7 +32,10 @@ public class Product extends BaseModel {
 		return currency;
 	}
 
-	public void setCurrency(CurrencyEnum currency) {
+	public void setCurrency(CurrencyEnum currency) throws NullPointerException {
+		if (currency == null) {
+			throw new NullPointerException("Currency cannot be null");
+		}
 		this.currency = currency;
 	}
 
@@ -63,6 +44,9 @@ public class Product extends BaseModel {
 	}
 
 	public void setName(String name) {
+		if (name == null) {
+			throw new NullPointerException("Name cannot be null");
+		}
 		this.name = name;
 	}
 
@@ -70,7 +54,13 @@ public class Product extends BaseModel {
 		return price;
 	}
 
-	public void setPrice(Double price) {
+	public void setPrice(Double price) throws PriceBelowOrEqualZeroException {
+		if (price == null) {
+			throw new NullPointerException("Price cannot be null");
+		}
+		if (price <= 0.0) {
+			throw new PriceBelowOrEqualZeroException("Price cannot be negative");
+		}
 		this.price = price;
 	}
 

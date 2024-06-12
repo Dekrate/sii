@@ -30,40 +30,40 @@ public class ProductService {
 	}
 
 	@Transactional
-	public void createProduct(NewProductDto productDto) throws ProductIsNullException, CurrencyDoesNotExistException, ProductExistsException, PriceBelowOrEqualZeroException {
+	public void createProduct(NewProductDto productDto) throws Exception {
 		if (productDto == null) {
-			throw new ProductIsNullException("OrderDto cannot be null");
+			throw new ProductIsNullException("ProductDto cannot be null");
 		}
-		if (productDto.name() == null) {
-			throw new ProductIsNullException("OrderDto.name() cannot be null");
+		// check if a product with the same name already exists
+		if (productRepository.findByName(productDto.name()).isPresent()) {
+			throw new ProductExistsException("Product already exists");
 		}
-		if (productDto.price() == null) {
-			throw new ProductIsNullException("OrderDto.price() cannot be null");
-		}
+		// check if the currency is valid
 		if (Arrays.stream(CurrencyEnum.values()).noneMatch(currencyEnum ->
 				currencyEnum.name().equals(productDto.currency()))) {
 			throw new CurrencyDoesNotExistException("Currency does not exist");
 		}
-		if (productRepository.findByName(productDto.name()).isPresent()) {
-			throw new ProductExistsException("Product already exists");
-		}
-		if (productDto.price() <= 0) {
-			throw new PriceBelowOrEqualZeroException("Price cannot be negative");
-		}
-		productRepository.save(new pl.diakowski.mikolaj.sii.product.Product(CurrencyEnum.valueOf(productDto.currency()), productDto.name(),
-				productDto.description(), productDto.price()));
+		Product product = new Product();
+		product.setName(productDto.name());
+		product.setPrice(productDto.price());
+		product.setDescription(productDto.description());
+		product.setCurrency(CurrencyEnum.valueOf(productDto.currency()));
+		productRepository.save(product);
 	}
 
 	@Transactional
-	public void updateProduct(@RequestParam String name, NewProductDto productDto) throws ProductIsNullException, CurrencyDoesNotExistException, PriceBelowOrEqualZeroException {
+	public void updateProduct(@RequestParam String name, NewProductDto productDto) throws ProductIsNullException, CurrencyDoesNotExistException, PriceBelowOrEqualZeroException, ProductExistsException {
 
 		if (productDto == null) {
 			throw new ProductIsNullException("ProductDto cannot be null");
 		}
 
-		pl.diakowski.mikolaj.sii.product.Product product = productRepository.findByName(name)
+		Product product = productRepository.findByName(name)
 				.orElseThrow(() -> new ProductIsNullException("Product does not exist"));
 		if (productDto.name() != null) {
+			if (productRepository.findByName(productDto.name()).isPresent()) {
+				throw new ProductExistsException("Product already exists");
+			}
 			product.setName(productDto.name());
 		}
 		if (productDto.price() != null) {
@@ -89,7 +89,7 @@ public class ProductService {
 
 	public Double getDiscountPriceForProduct(String name, String promoCode) throws ProductIsNullException,
 			PromoCodeNotFoundException, CurrenciesNotEqualException, DiscountTooHighException {
-		pl.diakowski.mikolaj.sii.product.Product product = productRepository.findByName(name)
+		Product product = productRepository.findByName(name)
 				.orElseThrow(() -> new ProductIsNullException("Product does not exist"));
 		PromoCode promoCodeObject = promoCodeRepository.findByCode(promoCode)
 				.orElseThrow(() -> new PromoCodeNotFoundException("Promo code does not exist"));
