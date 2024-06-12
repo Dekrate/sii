@@ -1,8 +1,10 @@
-package pl.diakowski.mikolaj.sii.product.exception;
+package pl.diakowski.mikolaj.sii.currency.exception;
+
+import pl.diakowski.mikolaj.sii.order.dto.OrderDto;
 
 public class CurrenciesNotEqualException extends Exception {
 	private Double price;
-
+	private OrderDto orderDto;
 	public CurrenciesNotEqualException() {
 	}
 
@@ -25,6 +27,11 @@ public class CurrenciesNotEqualException extends Exception {
 
 	public CurrenciesNotEqualException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
+	}
+
+	public CurrenciesNotEqualException(String currencyDoesNotExist, OrderDto orderDto) {
+		super(currencyDoesNotExist);
+		this.orderDto = orderDto;
 	}
 
 	public String getPrice() {

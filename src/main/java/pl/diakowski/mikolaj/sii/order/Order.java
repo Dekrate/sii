@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import pl.diakowski.mikolaj.sii.basemodel.BaseModel;
 import pl.diakowski.mikolaj.sii.currency.CurrencyEnum;
-import pl.diakowski.mikolaj.sii.product.ProductImpl;
+import pl.diakowski.mikolaj.sii.product.Product;
 
 import java.time.LocalDateTime;
 
@@ -18,7 +18,7 @@ public class Order extends BaseModel {
 	@Enumerated(EnumType.STRING)
 	@NotNull
 	private CurrencyEnum currency;
-	@ManyToOne(targetEntity = ProductImpl.class) // Spring Data JPA generally doesn't support interfaces as fields
+	@ManyToOne
 	@NotNull
 	private Product product;
 

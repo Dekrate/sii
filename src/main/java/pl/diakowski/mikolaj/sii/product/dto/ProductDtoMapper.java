@@ -2,12 +2,12 @@ package pl.diakowski.mikolaj.sii.product.dto;
 
 public class ProductDtoMapper {
 
-	public static Product mapToDto(pl.diakowski.mikolaj.sii.product.Product product) {
-		return new Product(product.getCurrency(), product.getName(),
+	public static ProductDto mapToDto(pl.diakowski.mikolaj.sii.product.Product product) {
+		return new ProductDto(product.getCurrency(), product.getName(),
 				product.getDescription(), product.getPrice());
 	}
 
-	public static pl.diakowski.mikolaj.sii.product.Product mapToProduct(Product productDto) {
+	public static pl.diakowski.mikolaj.sii.product.Product mapToProduct(ProductDto productDto) {
 		pl.diakowski.mikolaj.sii.product.Product product = new pl.diakowski.mikolaj.sii.product.Product();
 		product.setCurrency(productDto.currency());
 		product.setName(productDto.name());

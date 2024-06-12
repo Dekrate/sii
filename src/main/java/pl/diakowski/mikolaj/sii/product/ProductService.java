@@ -4,9 +4,10 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 import pl.diakowski.mikolaj.sii.currency.CurrencyEnum;
+import pl.diakowski.mikolaj.sii.currency.exception.CurrenciesNotEqualException;
 import pl.diakowski.mikolaj.sii.product.dto.NewProductDto;
 import pl.diakowski.mikolaj.sii.product.dto.ProductDtoMapper;
-import pl.diakowski.mikolaj.sii.product.dto.Product;
+import pl.diakowski.mikolaj.sii.product.dto.ProductDto;
 import pl.diakowski.mikolaj.sii.product.exception.*;
 import pl.diakowski.mikolaj.sii.currency.exception.CurrencyDoesNotExistException;
 import pl.diakowski.mikolaj.sii.promocode.PromoCode;
@@ -101,7 +102,7 @@ public class ProductService {
 		return product.getPrice() - promoCodeObject.getDiscount();
 	}
 
-	public List<Product> getProducts() {
+	public List<ProductDto> getProducts() {
 		return productRepository.findAll().stream()
 				.map(ProductDtoMapper::mapToDto)
 				.collect(Collectors.toList());

@@ -3,8 +3,8 @@ package pl.diakowski.mikolaj.sii.product;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.diakowski.mikolaj.sii.product.dto.NewProductDto;
-import pl.diakowski.mikolaj.sii.product.dto.Product;
-import pl.diakowski.mikolaj.sii.product.exception.CurrenciesNotEqualException;
+import pl.diakowski.mikolaj.sii.product.dto.ProductDto;
+import pl.diakowski.mikolaj.sii.currency.exception.CurrenciesNotEqualException;
 import pl.diakowski.mikolaj.sii.product.exception.DiscountTooHighException;
 import pl.diakowski.mikolaj.sii.product.exception.ProductIsNullException;
 import pl.diakowski.mikolaj.sii.promocode.exception.PromoCodeNotFoundException;
@@ -58,7 +58,7 @@ public class ProductController {
 	}
 
 	@GetMapping("/get-products")
-	public ResponseEntity<List<Product>> getProducts() {
+	public ResponseEntity<List<ProductDto>> getProducts() {
 		return ResponseEntity.ok(productService.getProducts());
 
 	}

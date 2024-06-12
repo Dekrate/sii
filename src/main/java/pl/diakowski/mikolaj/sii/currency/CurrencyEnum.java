@@ -18,4 +18,6 @@ public enum CurrencyEnum {
 	public Double getExchangeRate() {
 		return exchangeRate;
 	}
+
+
 }

@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
-class ProductTests {
+class ProductDtoTests {
 
 	@Mock
 	private ProductRepository productRepository;
