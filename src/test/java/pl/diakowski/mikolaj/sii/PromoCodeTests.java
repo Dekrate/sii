@@ -8,7 +8,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import pl.diakowski.mikolaj.sii.currency.exception.CurrencyDoesNotExistException;
 import pl.diakowski.mikolaj.sii.promocode.PromoCodeRepository;
-import pl.diakowski.mikolaj.sii.promocode.PromoCodeServiceImpl;
+import pl.diakowski.mikolaj.sii.promocode.PromoCodeService;
 import pl.diakowski.mikolaj.sii.promocode.dto.NewPromoCodeDto;
 import pl.diakowski.mikolaj.sii.promocode.exception.*;
 
@@ -24,7 +24,7 @@ class PromoCodeTests {
 	private PromoCodeRepository promoCodeRepository;
 
 	@InjectMocks
-	private PromoCodeServiceImpl promoCodeService;
+	private PromoCodeService promoCodeService;
 
 	@BeforeEach
 	public void setup() {

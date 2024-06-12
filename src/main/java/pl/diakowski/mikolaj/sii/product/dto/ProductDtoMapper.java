@@ -1,17 +1,14 @@
 package pl.diakowski.mikolaj.sii.product.dto;
 
-import pl.diakowski.mikolaj.sii.product.Product;
-import pl.diakowski.mikolaj.sii.product.ProductImpl;
-
 public class ProductDtoMapper {
 
-	public static ProductImplDto mapToDto(Product product) {
-		return new ProductImplDto(product.getCurrency(), product.getName(),
+	public static Product mapToDto(pl.diakowski.mikolaj.sii.product.Product product) {
+		return new Product(product.getCurrency(), product.getName(),
 				product.getDescription(), product.getPrice());
 	}
 
-	public static Product mapToProduct(ProductImplDto productDto) {
-		Product product = new ProductImpl();
+	public static pl.diakowski.mikolaj.sii.product.Product mapToProduct(Product productDto) {
+		pl.diakowski.mikolaj.sii.product.Product product = new pl.diakowski.mikolaj.sii.product.Product();
 		product.setCurrency(productDto.currency());
 		product.setName(productDto.name());
 		product.setDescription(productDto.description());

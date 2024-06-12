@@ -5,10 +5,10 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import org.hibernate.validator.constraints.Range;
-import pl.diakowski.mikolaj.sii.promocode.PromoCodeImpl;
+import pl.diakowski.mikolaj.sii.promocode.PromoCode;
 
 /**
- * DTO for {@link PromoCodeImpl}
+ * DTO for {@link PromoCode}
  */
 public record NewPromoCodeDto(@NotNull @Size(min = 3, max = 24) @Pattern(regexp = "^\\S+$") String code,
                               String currency,

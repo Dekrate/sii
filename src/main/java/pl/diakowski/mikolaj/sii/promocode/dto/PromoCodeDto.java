@@ -5,13 +5,10 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import org.hibernate.validator.constraints.Range;
 import pl.diakowski.mikolaj.sii.currency.CurrencyEnum;
-import pl.diakowski.mikolaj.sii.promocode.PromoCodeImpl;
-
-import java.io.Serializable;
-import java.time.LocalDateTime;
+import pl.diakowski.mikolaj.sii.promocode.PromoCode;
 
 /**
- * DTO for {@link PromoCodeImpl}
+ * DTO for {@link PromoCode}
  */
 public record PromoCodeDto(@NotNull @Size(min = 3, max = 24) @Pattern(regexp = "^\\S+$") String code,
                            @NotNull CurrencyEnum currency,
