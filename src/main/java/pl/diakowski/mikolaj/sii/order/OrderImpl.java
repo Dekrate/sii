@@ -15,7 +15,6 @@ public class OrderImpl extends BaseModel implements Order {
 	private LocalDateTime creationDate;
 	@NotNull
 	private Double regularPrice;
-	@NotNull
 	private Double discountPrice;
 	@Enumerated(EnumType.STRING)
 	@NotNull

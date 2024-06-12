@@ -2,7 +2,7 @@ package pl.diakowski.mikolaj.sii.order;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import pl.diakowski.mikolaj.sii.order.dto.NewOrderImplDto;
 import pl.diakowski.mikolaj.sii.order.dto.OrderImplDto;
@@ -17,8 +17,11 @@ public class OrderControllerImpl implements OrderController {
 
 	@Override
 	@GetMapping("/simulate-purchase")
-	public ResponseEntity<NewOrderImplDto> simulatePurchase(@RequestParam String name,
-	                                                        @RequestParam String promoCode) {
-
+	public ResponseEntity<OrderImplDto> simulatePurchase(@RequestBody NewOrderImplDto newOrderImplDto) {
+		try {
+		return ResponseEntity.ok(orderService.simulatePurchase(newOrderImplDto));
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().build();
+		}
 	}
 }
