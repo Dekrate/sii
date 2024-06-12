@@ -2,6 +2,8 @@ package pl.diakowski.mikolaj.sii.product;
 
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import pl.diakowski.mikolaj.sii.currency.CurrencyEnum;
 import pl.diakowski.mikolaj.sii.product.dto.NewProductImplDto;
 import pl.diakowski.mikolaj.sii.product.dto.ProductDtoMapper;
@@ -13,6 +15,7 @@ import pl.diakowski.mikolaj.sii.promocode.PromoCodeRepository;
 import pl.diakowski.mikolaj.sii.promocode.PromoCodeService;
 import pl.diakowski.mikolaj.sii.promocode.exception.PromoCodeNotFoundException;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -55,7 +58,8 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	@Transactional
-	public void updateProduct(String name, NewProductImplDto productDto) throws ProductIsNullException, CurrencyDoesNotExistException {
+	public void updateProduct(@RequestParam String name, NewProductImplDto productDto) throws ProductIsNullException, CurrencyDoesNotExistException, PriceBelowOrEqualZeroException {
+
 		if (productDto == null) {
 			throw new ProductIsNullException("ProductDto cannot be null");
 		}
@@ -66,6 +70,9 @@ public class ProductServiceImpl implements ProductService {
 			product.setName(productDto.name());
 		}
 		if (productDto.price() != null) {
+			if (productDto.price() <= 0.0) {
+				throw new PriceBelowOrEqualZeroException("Price cannot be negative");
+			}
 			product.setPrice(productDto.price());
 		}
 		if (productDto.description() != null) {
@@ -78,8 +85,8 @@ public class ProductServiceImpl implements ProductService {
 			}
 			product.setCurrency(CurrencyEnum.valueOf(productDto.currency()));
 		}
-
-		productRepository.save(product); // TODO check
+		product.setUpdatedAt(LocalDateTime.now());
+		productRepository.save(product);
 
 	}
 

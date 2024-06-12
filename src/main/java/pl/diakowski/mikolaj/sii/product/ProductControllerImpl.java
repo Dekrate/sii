@@ -32,7 +32,7 @@ public class ProductControllerImpl implements ProductController {
 
 	@Override
 	@PatchMapping("/update-product")
-	public ResponseEntity<?> updateProduct(String name, NewProductImplDto productDto) {
+	public ResponseEntity<?> updateProduct(@RequestParam String name, @RequestBody NewProductImplDto productDto) {
 		try {
 			productService.updateProduct(name, productDto);
 			return ResponseEntity.ok().build();

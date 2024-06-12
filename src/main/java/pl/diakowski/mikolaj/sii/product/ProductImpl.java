@@ -1,7 +1,10 @@
 package pl.diakowski.mikolaj.sii.product;
 
+import com.fasterxml.jackson.databind.annotation.EnumNaming;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Range;
 import pl.diakowski.mikolaj.sii.basemodel.BaseModel;
@@ -12,6 +15,7 @@ import java.time.LocalDateTime;
 @Entity
 public class ProductImpl extends BaseModel implements Product {
 	@NotNull
+	@Enumerated(EnumType.STRING)
 	CurrencyEnum currency;
 	@NotNull
 	@Column(unique = true)
@@ -30,6 +34,14 @@ public class ProductImpl extends BaseModel implements Product {
 	}
 
 	public ProductImpl(CurrencyEnum currency, String name, String description, Double price) {
+		this.currency = currency;
+		this.name = name;
+		this.description = description;
+		this.price = price;
+	}
+
+	public ProductImpl(LocalDateTime updatedAt, CurrencyEnum currency, String name, String description, Double price) {
+		super(updatedAt);
 		this.currency = currency;
 		this.name = name;
 		this.description = description;

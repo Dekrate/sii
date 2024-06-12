@@ -11,7 +11,7 @@ import java.util.List;
 public interface ProductService {
 	void createProduct(NewProductImplDto productDto) throws ProductIsNullException, CurrencyDoesNotExistException, ProductExistsException, PriceBelowOrEqualZeroException;
 
-	void updateProduct(String name, NewProductImplDto productDto) throws ProductIsNullException, CurrencyDoesNotExistException;
+	void updateProduct(String name, NewProductImplDto productDto) throws ProductIsNullException, CurrencyDoesNotExistException, PriceBelowOrEqualZeroException;
 
 	Double getDiscountPriceForProduct(String name, String promoCode) throws ProductIsNullException, PromoCodeNotFoundException, CurrenciesNotEqualException, DiscountTooHighException;
 

@@ -29,6 +29,10 @@ public abstract class BaseModel {
 		this.updatedAt = updatedAt;
 	}
 
+	public BaseModel(LocalDateTime updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
 	public BaseModel() {
 	}
 

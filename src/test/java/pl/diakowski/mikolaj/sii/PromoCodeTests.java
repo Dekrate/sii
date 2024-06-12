@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
-class SiiApplicationTests {
+class PromoCodeTests {
 
 	@Mock
 	private PromoCodeRepository promoCodeRepository;

@@ -53,6 +53,15 @@ public class PromoCodeImpl extends BaseModel implements PromoCode {
 		this.uses = uses;
 	}
 
+	public PromoCodeImpl(LocalDateTime updatedAt, String code, CurrencyEnum currencyEnum, Double discount, Long maxUses, Long uses) {
+		super(updatedAt);
+		this.code = code;
+		this.currencyEnum = currencyEnum;
+		this.discount = discount;
+		this.maxUses = maxUses;
+		this.uses = uses;
+	}
+
 	@Override
 	public Long getMaxUses() {
 		return maxUses;

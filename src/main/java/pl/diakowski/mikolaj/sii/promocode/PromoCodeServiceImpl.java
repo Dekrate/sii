@@ -9,6 +9,7 @@ import pl.diakowski.mikolaj.sii.promocode.dto.PromoCodeDto;
 import pl.diakowski.mikolaj.sii.promocode.dto.PromoCodeDtoMapper;
 import pl.diakowski.mikolaj.sii.promocode.exception.*;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
