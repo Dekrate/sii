@@ -22,7 +22,7 @@ public class PromoCodeService {
 
 	@Transactional
 	public void addPromoCode(NewPromoCodeDto promoCodeDto) throws
-			CodeAlreadyExistsException, InvalidMaxUsesException, CurrencyDoesNotExistException, InvalidDiscountException, PromoCodeExpiredException {
+			CodeAlreadyExistsException, InvalidMaxUsesException, CurrencyDoesNotExistException, InvalidDiscountException, PromoCodeExpiredException, CodeIsNullException, CodeHasSpacesException, InvalidCodeLengthException {
 		if (promoCodeRepository.findByCode(promoCodeDto.code()).isPresent()) {
 			throw new CodeAlreadyExistsException("Code already exists");
 		}

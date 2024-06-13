@@ -12,9 +12,7 @@ import org.hibernate.validator.constraints.Range;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 import pl.diakowski.mikolaj.sii.basemodel.BaseModel;
 import pl.diakowski.mikolaj.sii.currency.CurrencyEnum;
-import pl.diakowski.mikolaj.sii.promocode.exception.InvalidDiscountException;
-import pl.diakowski.mikolaj.sii.promocode.exception.InvalidMaxUsesException;
-import pl.diakowski.mikolaj.sii.promocode.exception.PromoCodeExpiredException;
+import pl.diakowski.mikolaj.sii.promocode.exception.*;
 
 @Entity
 public class PromoCode extends BaseModel {
@@ -59,15 +57,15 @@ public class PromoCode extends BaseModel {
 		return code;
 	}
 
-	public void setCode(String code) {
+	public void setCode(String code) throws CodeIsNullException, InvalidCodeLengthException, CodeHasSpacesException {
 		if (code == null) {
-			throw new NullPointerException("Code cannot be null");
+			throw new CodeIsNullException("Code cannot be null");
 		}
 		if (code.length() < 3 || code.length() > 24) {
-			throw new IllegalArgumentException("Code must be at least 3 characters long and at most 24 characters long");
+			throw new InvalidCodeLengthException("Code must be at least 3 characters long and at most 24 characters long");
 		}
 		if (!code.matches("^\\S+$")) {
-			throw new IllegalArgumentException("Code must not contain whitespace characters");
+			throw new CodeHasSpacesException("Code must not contain whitespace characters");
 		}
 		this.code = code;
 	}
