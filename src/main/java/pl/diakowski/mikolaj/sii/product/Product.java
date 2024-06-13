@@ -10,8 +10,6 @@ import pl.diakowski.mikolaj.sii.basemodel.BaseModel;
 import pl.diakowski.mikolaj.sii.currency.CurrencyEnum;
 import pl.diakowski.mikolaj.sii.product.exception.PriceBelowOrEqualZeroException;
 
-import java.time.LocalDateTime;
-
 @Entity
 public class Product extends BaseModel {
 	@NotNull

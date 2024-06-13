@@ -9,7 +9,6 @@ import pl.diakowski.mikolaj.sii.product.dto.ProductDto;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 /**
  * DTO for {@link Order}

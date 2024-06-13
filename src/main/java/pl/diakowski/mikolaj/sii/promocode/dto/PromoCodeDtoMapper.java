@@ -1,8 +1,6 @@
 package pl.diakowski.mikolaj.sii.promocode.dto;
 
 import pl.diakowski.mikolaj.sii.promocode.PromoCode;
-import pl.diakowski.mikolaj.sii.promocode.exception.InvalidDiscountException;
-import pl.diakowski.mikolaj.sii.promocode.exception.InvalidMaxUsesException;
 
 public class PromoCodeDtoMapper {
 	public static PromoCodeDto mapToDto(PromoCode promoCode) {

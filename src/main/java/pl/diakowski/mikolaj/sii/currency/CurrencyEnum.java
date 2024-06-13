@@ -6,7 +6,7 @@ public enum CurrencyEnum {
 	private final Double exchangeRate;
 
 
-	private CurrencyEnum(String name, double exchangeRate) {
+	CurrencyEnum(String name, double exchangeRate) {
 		this.name = name;
 		this.exchangeRate = exchangeRate;
 	}

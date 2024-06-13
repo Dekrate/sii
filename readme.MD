@@ -6,12 +6,12 @@
 ``` shell
 docker build -t sii-recruitment-task .
 ```
-3. Run:
+1. Run:
 ``` shell
 docker run -p 8080:8080 sii-recruitment-task
 ```
-3. The application will be available at `http://localhost:8080`
-4. Use the following URL's to access the REST services:
+1. The application will be available at `http://localhost:8080`
+2. Use the following URL's to access the REST services:
 
 
 ## REST API endpoints
