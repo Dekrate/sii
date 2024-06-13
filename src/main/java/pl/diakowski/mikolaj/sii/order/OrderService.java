@@ -10,10 +10,10 @@ import pl.diakowski.mikolaj.sii.order.dto.OrderDtoMapper;
 import pl.diakowski.mikolaj.sii.order.exception.OrderIsNullException;
 import pl.diakowski.mikolaj.sii.product.Product;
 import pl.diakowski.mikolaj.sii.product.ProductRepository;
-import pl.diakowski.mikolaj.sii.product.ProductService;
 import pl.diakowski.mikolaj.sii.product.exception.ProductIsNullException;
 import pl.diakowski.mikolaj.sii.promocode.PromoCode;
 import pl.diakowski.mikolaj.sii.promocode.PromoCodeRepository;
+import pl.diakowski.mikolaj.sii.promocode.exception.PromoCodeExpiredException;
 import pl.diakowski.mikolaj.sii.promocode.exception.PromoCodeNotFoundException;
 
 import java.util.Arrays;
@@ -24,7 +24,7 @@ public class OrderService {
 	private final PromoCodeRepository promoCodeRepository;
 	private final ProductRepository productRepository;
 
-	public OrderService(OrderRepository orderRepository, PromoCodeRepository promoCodeRepository, ProductRepository productRepository, ProductService productService) {
+	public OrderService(OrderRepository orderRepository, PromoCodeRepository promoCodeRepository, ProductRepository productRepository) {
 		this.orderRepository = orderRepository;
 		this.productRepository = productRepository;
 		this.promoCodeRepository = promoCodeRepository;
@@ -51,18 +51,26 @@ public class OrderService {
 		CurrencyEnum currency = CurrencyEnum.valueOf(product.getCurrency().getName());
 
 		Order order = new Order();
+
 		order.setCurrency(currency);
 		order.setProduct(product);
 		order.setRegularPrice(product.getPrice());
-		promoCode.setUses(promoCode.getUses() + 1);
-
+		String warning = "";
+		try {
+			promoCode.setUses(promoCode.getUses() + 1);
+		} catch (PromoCodeExpiredException e) {
+			order.setDiscountPrice(0.0, currency);
+			warning = "Promo code expired, discount price is 0.0";
+		}
 		order.setDiscountPrice(product.getPrice(), promoCode.getCurrency());
 		Order saved = orderRepository.save(order);
 
 		OrderDto orderDto = OrderDtoMapper.mapToDto(saved);
 		if (orderDto.regularPrice().equals(orderDto.discountPrice())) {
-			orderDto.setWarning("Discount price is equal to regular price");
+			warning += "Currencies are not equal, discount price is the same as regular price.";
 		}
+		orderDto.setWarning(warning);
+
 		return orderDto;
 	}
 }

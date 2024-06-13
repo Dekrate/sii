@@ -67,7 +67,7 @@ public class Order extends BaseModel {
 		}
 		if (currency != promoCodeCurrency) {
 			this.discountPrice = regularPrice;
-			// daj warning
+
 		} else {
 			double discountedPrice = regularPrice - discountPrice;
 			if (discountedPrice < 0) {
