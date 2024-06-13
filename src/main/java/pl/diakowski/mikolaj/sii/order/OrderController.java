@@ -11,6 +11,8 @@ import pl.diakowski.mikolaj.sii.currency.exception.CurrenciesNotEqualException;
 import pl.diakowski.mikolaj.sii.order.dto.NewOrderDto;
 import pl.diakowski.mikolaj.sii.order.dto.OrderDto;
 
+import java.util.List;
+
 @RestController
 public class OrderController {
 	private final OrderService orderService;
@@ -27,6 +29,11 @@ public class OrderController {
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
+	}
+
+	@GetMapping("/purchase-details")
+	public ResponseEntity<List<Object[]>> getRawSalesReport() {
+		return ResponseEntity.ok(orderService.getRawSalesReport());
 	}
 
 	@ExceptionHandler

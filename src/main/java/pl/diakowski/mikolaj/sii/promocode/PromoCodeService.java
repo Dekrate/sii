@@ -21,7 +21,7 @@ public class PromoCodeService {
 	}
 
 	@Transactional
-	public void addPromoCode(NewPromoCodeDto promoCodeDto) throws CodeIsNullException, InvalidCodeLengthException,
+	public void addPromoCode(NewPromoCodeDto promoCodeDto) throws
 			CodeAlreadyExistsException, InvalidMaxUsesException, CurrencyDoesNotExistException, InvalidDiscountException, PromoCodeExpiredException {
 		if (promoCodeRepository.findByCode(promoCodeDto.code()).isPresent()) {
 			throw new CodeAlreadyExistsException("Code already exists");
@@ -43,7 +43,7 @@ public class PromoCodeService {
 	}
 
 	public PromoCodeDto getPromoCode(String code) throws PromoCodeNotFoundException {
-		return promoCodeRepository.findByCode(code).map(PromoCodeDtoMapper::mapToDto)
+			return promoCodeRepository.findByCode(code).map(PromoCodeDtoMapper::mapToDto)
 				.orElseThrow(() -> new PromoCodeNotFoundException("Promo code not found"));
 	}
 }

@@ -17,6 +17,7 @@ import pl.diakowski.mikolaj.sii.promocode.exception.PromoCodeExpiredException;
 import pl.diakowski.mikolaj.sii.promocode.exception.PromoCodeNotFoundException;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Service
 public class OrderService {
@@ -56,22 +57,27 @@ public class OrderService {
 		order.setProduct(product);
 		order.setRegularPrice(product.getPrice());
 		String warning = "";
-		try {
-			promoCode.setUses(promoCode.getUses() + 1);
-		} catch (PromoCodeExpiredException e) {
-			order.setDiscountPrice(0.0, currency);
-			warning = "Promo code expired, discount price is 0.0";
-		}
-		order.setDiscountPrice(product.getPrice(), promoCode.getCurrency());
+		order.setDiscountPrice(promoCode.getDiscount(), promoCode.getCurrency());
 		Order saved = orderRepository.save(order);
 
 		OrderDto orderDto = OrderDtoMapper.mapToDto(saved);
 		if (orderDto.regularPrice().equals(orderDto.discountPrice())) {
 			warning += "Currencies are not equal, discount price is the same as regular price.";
 		}
+		try {
+			if (warning.isEmpty())
+				promoCode.setUses(promoCode.getUses() + 1);
+		} catch (PromoCodeExpiredException e) {
+			order.setDiscountPrice(0.0, currency);
+			warning = "Promo code expired, discount price is 0.0";
 		orderDto.setWarning(warning);
+		}
 
 		return orderDto;
+	}
+
+	public List<Object[]> getRawSalesReport() {
+		return orderRepository.getSalesReport();
 	}
 }
 
