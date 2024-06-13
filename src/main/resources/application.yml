@@ -21,6 +21,8 @@ spring:
     data:
         jdbc:
             dialect: h2
+        rest:
+            detection-strategy: annotated
     jpa:
         database-platform: org.hibernate.dialect.H2Dialect
 server:
