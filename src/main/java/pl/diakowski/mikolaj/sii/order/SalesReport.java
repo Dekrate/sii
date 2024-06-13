@@ -2,14 +2,16 @@ package pl.diakowski.mikolaj.sii.order;
 
 import pl.diakowski.mikolaj.sii.currency.CurrencyEnum;
 
+import java.math.BigDecimal;
+
 public class SalesReport {
 
 	private CurrencyEnum currency;
-	private Double totalAmount;
-	private Double totalDiscount;
+	private BigDecimal totalAmount;
+	private BigDecimal totalDiscount;
 	private Long numberOfPurchases;
 
-	public SalesReport(CurrencyEnum currency, Double totalAmount, Double totalDiscount, Long numberOfPurchases) {
+	public SalesReport(CurrencyEnum currency, BigDecimal totalAmount, BigDecimal totalDiscount, Long numberOfPurchases) {
 		this.currency = currency;
 		this.totalAmount = totalAmount;
 		this.totalDiscount = totalDiscount;
@@ -24,19 +26,19 @@ public class SalesReport {
 		this.currency = currency;
 	}
 
-	public Double getTotalAmount() {
+	public BigDecimal getTotalAmount() {
 		return totalAmount;
 	}
 
-	public void setTotalAmount(Double totalAmount) {
+	public void setTotalAmount(BigDecimal totalAmount) {
 		this.totalAmount = totalAmount;
 	}
 
-	public Double getTotalDiscount() {
+	public BigDecimal getTotalDiscount() {
 		return totalDiscount;
 	}
 
-	public void setTotalDiscount(Double totalDiscount) {
+	public void setTotalDiscount(BigDecimal totalDiscount) {
 		this.totalDiscount = totalDiscount;
 	}
 

@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import pl.diakowski.mikolaj.sii.currency.exception.CurrenciesNotEqualException;
 import pl.diakowski.mikolaj.sii.order.dto.NewOrderDto;
 import pl.diakowski.mikolaj.sii.order.dto.OrderDto;
 
@@ -32,8 +31,8 @@ public class OrderController {
 	}
 
 	@GetMapping("/purchase-details")
-	public ResponseEntity<List<Object[]>> getRawSalesReport() {
-		return ResponseEntity.ok(orderService.getRawSalesReport());
+	public ResponseEntity<List<SalesReport>> getRawSalesReport() {
+		return ResponseEntity.ok(orderService.getSalesReport());
 	}
 
 	@ExceptionHandler

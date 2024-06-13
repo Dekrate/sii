@@ -16,8 +16,10 @@ import pl.diakowski.mikolaj.sii.promocode.PromoCodeRepository;
 import pl.diakowski.mikolaj.sii.promocode.exception.PromoCodeExpiredException;
 import pl.diakowski.mikolaj.sii.promocode.exception.PromoCodeNotFoundException;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
@@ -76,8 +78,17 @@ public class OrderService {
 		return orderDto;
 	}
 
-	public List<Object[]> getRawSalesReport() {
-		return orderRepository.getSalesReport();
+	public List<SalesReport> getSalesReport() {
+		List<Object[]> reportData = orderRepository.getSalesReport();
+		return reportData.stream().map(this::mapToSalesReport).collect(Collectors.toList());
+	}
+
+	private SalesReport mapToSalesReport(Object[] data) {
+		CurrencyEnum currency = CurrencyEnum.valueOf((String) data[0]);
+		BigDecimal totalAmount = (BigDecimal) data[1];
+		BigDecimal totalDiscount = (BigDecimal) data[2];
+		Long numberOfPurchases = ((Number) data[3]).longValue();
+		return new SalesReport(currency, totalAmount, totalDiscount, numberOfPurchases);
 	}
 }
 
