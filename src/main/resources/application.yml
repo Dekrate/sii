@@ -28,3 +28,4 @@ spring:
 server:
     http2:
         enabled: true
+
