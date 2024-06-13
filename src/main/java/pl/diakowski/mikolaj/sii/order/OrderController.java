@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import pl.diakowski.mikolaj.sii.currency.exception.CurrenciesNotEqualException;
 import pl.diakowski.mikolaj.sii.order.dto.NewOrderDto;
 import pl.diakowski.mikolaj.sii.order.dto.OrderDto;
 
@@ -21,9 +22,10 @@ public class OrderController {
 	@GetMapping("/simulate-purchase")
 	public ResponseEntity<?> simulatePurchase(@RequestBody NewOrderDto newOrderDto) {
 		try {
-			return ResponseEntity.ok(orderService.simulatePurchase(newOrderDto));
+			OrderDto body = orderService.simulatePurchase(newOrderDto);
+			return ResponseEntity.ok(body);
 		} catch (Exception e) {
-			return ResponseEntity.badRequest().build();
+			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
 

@@ -66,13 +66,15 @@ public class Order extends BaseModel {
 			throw new InvalidPriceException("Promo code currency cannot be null");
 		}
 		if (currency != promoCodeCurrency) {
-			throw new CurrenciesNotEqualException("Currency of promo code and order must be the same");
+			this.discountPrice = regularPrice;
+			// daj warning
+		} else {
+			double discountedPrice = regularPrice - discountPrice;
+			if (discountedPrice < 0) {
+				throw new InvalidPriceException("Discount price cannot be greater than regular price");
+			}
+			this.discountPrice = discountedPrice;
 		}
-		double discountedPrice = regularPrice - discountPrice;
-		if (discountedPrice < 0) {
-			throw new InvalidPriceException("Discount price cannot be greater than regular price");
-		}
-		this.discountPrice = discountedPrice;
 	}
 
 	public Product getProduct() {

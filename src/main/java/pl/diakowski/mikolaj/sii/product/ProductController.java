@@ -1,6 +1,5 @@
 package pl.diakowski.mikolaj.sii.product;
 
-import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -54,7 +53,7 @@ public class ProductController {
 			}
 			return ResponseEntity.ok(productService.getDiscountPriceForProduct(name, promoCode));
 		} catch (ProductIsNullException | PromoCodeNotFoundException | DiscountTooHighException e) {
-			return ResponseEntity.badRequest().build();
+			return ResponseEntity.badRequest().body(e.getMessage());
 		} catch (CurrenciesNotEqualException e) {
 			return ResponseEntity.ok("Price: " + e.getPrice() + ". " + e.getMessage());
 		}

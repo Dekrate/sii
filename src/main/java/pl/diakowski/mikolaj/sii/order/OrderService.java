@@ -23,13 +23,11 @@ public class OrderService {
 	private final OrderRepository orderRepository;
 	private final PromoCodeRepository promoCodeRepository;
 	private final ProductRepository productRepository;
-	private final ProductService productService;
 
 	public OrderService(OrderRepository orderRepository, PromoCodeRepository promoCodeRepository, ProductRepository productRepository, ProductService productService) {
 		this.orderRepository = orderRepository;
 		this.productRepository = productRepository;
 		this.promoCodeRepository = promoCodeRepository;
-		this.productService = productService;
 	}
 
 	@Transactional
@@ -42,15 +40,15 @@ public class OrderService {
 		PromoCode promoCode = promoCodeRepository
 				.findByCode(newOrderDto.promoCode())
 				.orElseThrow(() -> new PromoCodeNotFoundException("Promo code not found"));
-		if (Arrays.stream(CurrencyEnum.values()).noneMatch(currencyEnum ->
-				currencyEnum.name().equals(newOrderDto.currency()))) {
-			throw new CurrencyDoesNotExistException("Currency does not exist");
-		}
-		CurrencyEnum currency = CurrencyEnum.valueOf(newOrderDto.currency());
 
 		Product product = productRepository
 				.findByName(newOrderDto.productName())
 				.orElseThrow(() -> new ProductIsNullException("Product not found"));
+		if (Arrays.stream(CurrencyEnum.values()).noneMatch(currencyEnum ->
+				currencyEnum.name().equals(product.getCurrency().getName()))) {
+			throw new CurrencyDoesNotExistException("Currency does not exist");
+		}
+		CurrencyEnum currency = CurrencyEnum.valueOf(product.getCurrency().getName());
 
 		Order order = new Order();
 		order.setCurrency(currency);
@@ -60,7 +58,12 @@ public class OrderService {
 
 		order.setDiscountPrice(product.getPrice(), promoCode.getCurrency());
 		Order saved = orderRepository.save(order);
-		return OrderDtoMapper.mapToDto(saved);
+
+		OrderDto orderDto = OrderDtoMapper.mapToDto(saved);
+		if (orderDto.regularPrice().equals(orderDto.discountPrice())) {
+			orderDto.setWarning("Discount price is equal to regular price");
+		}
+		return orderDto;
 	}
 }
 
