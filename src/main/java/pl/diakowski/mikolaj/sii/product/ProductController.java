@@ -1,5 +1,7 @@
 package pl.diakowski.mikolaj.sii.product;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -14,6 +16,7 @@ import pl.diakowski.mikolaj.sii.promocode.exception.PromoCodeNotFoundException;
 import java.util.List;
 
 @RestController
+@Tag(name = "Product")
 public class ProductController {
 	private final ProductService productService;
 
@@ -21,7 +24,8 @@ public class ProductController {
 		this.productService = productService;
 	}
 
-	@PostMapping("/create-product") // tutaj uwaga na adnotację, ale chyba już nie jest wymagana
+	@PostMapping("/create-product")
+	@Operation(summary = "Create product")
 	public ResponseEntity<?> createProduct(@RequestBody NewProductDto productDto) {
 		try {
 			productService.createProduct(productDto);
@@ -32,6 +36,7 @@ public class ProductController {
 	}
 
 	@PatchMapping("/update-product")
+	@Operation(summary = "Update product")
 	public ResponseEntity<?> updateProduct(@RequestParam String name, @RequestBody NewProductDto productDto) {
 		try {
 			productService.updateProduct(name, productDto);
@@ -42,6 +47,7 @@ public class ProductController {
 	}
 
 	@GetMapping("/get-discount-price")
+	@Operation(summary = "Get discount price")
 	public ResponseEntity<?> getDiscountPriceForProduct(@RequestParam(required = false) String name,
 	                                                    @RequestParam(required = false) String promoCode) {
 		try {
@@ -60,6 +66,7 @@ public class ProductController {
 	}
 
 	@GetMapping("/get-products")
+	@Operation(summary = "Get products")
 	public ResponseEntity<List<ProductDto>> getProducts() {
 		return ResponseEntity.ok(productService.getProducts());
 

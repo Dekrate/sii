@@ -1,5 +1,7 @@
 package pl.diakowski.mikolaj.sii.order;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -13,6 +15,7 @@ import pl.diakowski.mikolaj.sii.order.dto.OrderDto;
 import java.util.List;
 
 @RestController
+@Tag(name = "Order")
 public class OrderController {
 	private final OrderService orderService;
 
@@ -21,6 +24,7 @@ public class OrderController {
 	}
 
 	@GetMapping("/simulate-purchase")
+	@Operation(summary = "Simulate purchase")
 	public ResponseEntity<?> simulatePurchase(@RequestBody NewOrderDto newOrderDto) {
 		try {
 			OrderDto body = orderService.simulatePurchase(newOrderDto);
@@ -31,6 +35,7 @@ public class OrderController {
 	}
 
 	@GetMapping("/purchase-details")
+	@Operation(summary = "Get purchase details")
 	public ResponseEntity<List<SalesReport>> getRawSalesReport() {
 		return ResponseEntity.ok(orderService.getSalesReport());
 	}
