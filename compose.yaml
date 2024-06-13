@@ -1,1 +1,11 @@
+version: '3.3'
 services:
+
+  app:
+    build:
+      context: .
+
+    ports:
+      - "8080:8080"
+
+    command: java -Djava.security.egd=file:/dev/./urandom -Dspring.profiles.active=local -jar /app.jar
