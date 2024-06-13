@@ -11,7 +11,6 @@ import pl.diakowski.mikolaj.sii.product.ProductService;
 import pl.diakowski.mikolaj.sii.product.dto.NewProductDto;
 import pl.diakowski.mikolaj.sii.product.exception.*;
 import pl.diakowski.mikolaj.sii.currency.exception.CurrencyDoesNotExistException;
-import pl.diakowski.mikolaj.sii.promocode.PromoCodeRepository;
 
 import java.util.Optional;
 
@@ -23,9 +22,6 @@ class ProductTests {
 
 	@Mock
 	private ProductRepository productRepository;
-
-	@Mock
-	private PromoCodeRepository promoCodeRepository;
 
 	@InjectMocks
 	private ProductService productService;

@@ -39,16 +39,8 @@ public class OrderDto implements Serializable {
 		this.productDto = productDto;
 	}
 
-	public String getWarning() {
-		return warning;
-	}
-
 	public void setWarning(String warning) {
 		this.warning = warning;
-	}
-
-	public @NotNull LocalDateTime creationDate() {
-		return creationDate;
 	}
 
 	public @NotNull Double regularPrice() {
@@ -59,15 +51,4 @@ public class OrderDto implements Serializable {
 		return discountPrice;
 	}
 
-	public @NotNull CurrencyEnum currency() {
-		return currency;
-	}
-
-	public @NotNull ProductDto productDto() {
-		return productDto;
-	}
-
-	public String warning() {
-		return warning;
-	}
 }

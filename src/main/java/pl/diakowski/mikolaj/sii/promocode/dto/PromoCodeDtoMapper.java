@@ -8,12 +8,4 @@ public class PromoCodeDtoMapper {
 				promoCode.getDiscount(), promoCode.getUses());
 	}
 
-	public static PromoCode mapToEntity(PromoCodeDto promoCodeDto) throws Exception {
-		PromoCode promoCode = new PromoCode();
-		promoCode.setCode(promoCodeDto.code());
-		promoCode.setCurrency(promoCodeDto.currency());
-		promoCode.setMaxUses(promoCodeDto.maxUses());
-		promoCode.setDiscount(promoCodeDto.discount());
-		return promoCode;
-	}
 }
